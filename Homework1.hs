@@ -24,7 +24,7 @@ doubleEveryOther xs =
 sumDigits :: [Integer] -> Integer
 
 -- use break each number into list of digits them sum those then sum those
-sumDigits xs = foldr (\x s -> (+) s $ sum $ toDigits x) 0 xs
+sumDigits xs = sum $ map (sum . toDigits) xs
 
 -- exercise 4
 validate :: Integer -> Bool
