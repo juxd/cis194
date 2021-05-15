@@ -30,7 +30,11 @@ insert message@(LogMessage _ timestamp _) (Node l node@(LogMessage _ node_timest
 insert _ _ = error "Cannot have unknown node in a tree"
 
 build :: [LogMessage] -> MessageTree
-build = foldl (flip insert) Leaf
+build messages =
+  let build' []       tree = tree
+      build' (x : xs) tree = build' xs (insert x tree)
+  in  build' messages Leaf
+-- build = foldl (flip insert) Leaf
 
 inOrder :: MessageTree -> [LogMessage]
 inOrder tree =
