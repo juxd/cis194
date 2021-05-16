@@ -56,3 +56,31 @@ instance Num (Stream Integer) where
   (+) (Stream a lt) (Stream b rt) = Stream (a + b) (lt + rt)
   (*) (Stream a lt) r@(Stream b rt) = Stream (a * b) (scaled a rt + lt * r)
     where scaled n (Stream a tl) = Stream (n * a) (scaled n tl)
+
+instance Fractional (Stream Integer) where
+  (/) (Stream a lt) (Stream b rt) = s
+   where
+    scaled n (Stream a tl) = Stream (n * a) (scaled n tl)
+    s = Stream (a `div` b) (scaled (1 `div` b) (lt - s * rt))
+
+fibs3 :: Stream Integer
+fibs3 = x / Stream 1 (Stream (-1) (Stream (-1) (streamRepeat 0)))
+
+-- Exercise 7
+data Matrix = Matrix Integer Integer Integer Integer
+
+instance Num Matrix where
+  (*) (Matrix a00 a01 a10 a11) (Matrix b00 b01 b10 b11) = Matrix
+    (a00 * b00 + a01 * b10)
+    (a00 * b01 + a01 * b11)
+    (a10 * b00 + a11 * b10)
+    (a10 * b01 + a11 * b11)
+
+fibs4 :: Integer -> Integer
+fibs4 0 = 0
+fibs4 n =
+  let fibs' 1 = Matrix 1 1 1 0
+      fibs' n | even n    = (\m -> m * m) (fibs' (n `div` 2))
+              | otherwise = fibs' 1 * fibs' (n - 1)
+      (Matrix _ r _ _) = fibs' n
+  in  r
