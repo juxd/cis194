@@ -26,14 +26,14 @@ localMaxima :: [Integer] -> [Integer]
 localMaxima = l
  where
   g a b c = b > a && b > c
-  l xs = case xs of
+  l x = case x of
     -- If we have exactly 3 elements in our list, we see if the middle element
     -- is a maxima
     [a, b, c] | g a b c -> [b]
     -- If we have 3 or more, we need to do the same, but recurse to the list
     -- tail.
-    a : ls@(b : c : _) | g a b c -> b : l ls
-                       | True    -> l ls
+    a : t@(b : c : _) | g a b c -> b : l t
+                      | True    -> l t
     -- The remaining case is a list with less than 3 elements, in which case
     -- none can be a maxima.
     _ -> []
