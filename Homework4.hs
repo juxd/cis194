@@ -6,7 +6,7 @@ fun1' :: [Integer] -> Integer
 fun1' = product . map (\x -> x - 2) . filter even
 
 fun2' :: Integer -> Integer
-fun2' = sum . filter even . takeWhile (\x -> x > 1) . iterate
+fun2' = sum . filter even . takeWhile ((<) 1) . iterate
   (\x -> if even x then x `div` 2 else x * 3 + 1)
 
 data Tree a = Leaf | Node Integer (Tree a) a (Tree a)
