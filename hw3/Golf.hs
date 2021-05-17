@@ -58,8 +58,8 @@ histogram l =
   -- In each line, we print out '*' (for each count) for every number whose
   -- count is >= that line's count, of ' ' otherwise.
   do
-    h <- reverse [1 .. maximum c]
-    [ if c !! i >= h then '*' else ' ' | i <- [0 .. 9] ] ++ "\n"
+    h <- reverse [1 .. maximum c - 1]
+    [ if c !! i > h then '*' else ' ' | i <- [0 .. 9] ] ++ "\n"
   ++ "==========\n0123456789\n"
   -- We first generate a count of items from methods imported from Data.Map
-  where c = map (\x -> length x - 1) $ group $ sort (l ++ [0 .. 9])
+  where c = map length $ group $ sort (l ++ [0 .. 9])
