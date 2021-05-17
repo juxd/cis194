@@ -5,30 +5,43 @@ module Golf where
 import           Data.List
 
 -- exercise 1: skips
+-- skips :: [a] -> [[a]]
+-- skips = s 1
+--  where
+--   -- `c` is short for "chunk and take" - it chunks the list into chunks of `n`
+--   -- size, and concats their heads together. `chunkOf` is not in the Haskell STL
+--   -- so this is more efficient than reimplimenting that and mapping head.
+--   c _ [] = []
+--   c n l  = let (h, t) = splitAt n l in head h : c n t
+--   -- `s` maps c with an `n` that increments as we go down the list
+--   s _ [] = []
+--   s n l  = c n l : s (n + 1) (tail l)
+
+-- exercise 1: skips
 skips :: [a] -> [[a]]
-skips = s 1
- where
-  -- `c` is short for "chunk and take" - it chunks the list into chunks of `n`
-  -- size, and concats their heads together. `chunkOf` is not in the Haskell STL
-  -- so this is more efficient than reimplimenting that and mapping head.
-  c _ [] = []
-  c n l  = let (h, t) = splitAt n l in head h : c n t
-  -- `s` maps c with an `n` that increments as we go down the list
-  s _ [] = []
-  s n l  = c n l : s (n + 1) (tail l)
+skips x =
+  [ [ e | (e, j) <- zip x [1 ..], mod j i == 0 ] | (_, i) <- zip x [1 ..] ]
+
+-- exercise 2: local maxima - old solution
+-- localMaxima :: [Integer] -> [Integer]
+-- localMaxima = l
+--  where
+--   l x = case x of
+--     -- If we have 3 or more elements, we check if second element is maxima then
+--     -- recurse to tail.
+--     a : t@(b : c : _) | b > a && b > c -> b : l t
+--                       | True           -> l t
+--     -- The remaining case is a list with less than 3 elements, in which case
+--     -- none can be a maxima.
+--     _ -> []
 
 -- exercise 2: local maxima
 localMaxima :: [Integer] -> [Integer]
-localMaxima = l
- where
-  l x = case x of
-    -- If we have 3 or more elements, we check if second element is maxima then
-    -- recurse to tail.
-    a : t@(b : c : _) | b > a && b > c -> b : l t
-                      | True           -> l t
-    -- The remaining case is a list with less than 3 elements, in which case
-    -- none can be a maxima.
-    _ -> []
+localMaxima l = do
+  x <- tails l
+  case x of
+    a : b : c : _ | b > a && b > c -> [b]
+    _                              -> []
 
 -- exercise 3: histogram - old solution
 -- histogram :: [Integer] -> String
