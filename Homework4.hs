@@ -30,7 +30,7 @@ foldTree = foldr insertBalanced Leaf
   height (Node h _ _ _) = h
 
 xor :: [Bool] -> Bool
-xor = foldl (\acc x -> acc /= x) False
+xor = foldl (/=) False
 
 map' :: (a -> b) -> [a] -> [b]
 map' f = foldr (\x acc -> f x : acc) []
