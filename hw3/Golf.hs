@@ -2,11 +2,7 @@
 
 module Golf where
 
-import           Data.Map                       ( (!)
-                                                , alter
-                                                , empty
-                                                , member
-                                                )
+import           Data.List
 
 -- exercise 1: skips
 skips :: [a] -> [[a]]
@@ -35,23 +31,35 @@ localMaxima = l
     -- none can be a maxima.
     _ -> []
 
+-- exercise 3: histogram - old solution
+-- histogram :: [Integer] -> String
+-- histogram l =
+--   -- In each line, we print out '*' (for each count) for every number whose
+--   -- count is >= that line's count, of ' ' otherwise.
+--   do
+--     h <- reverse [1 .. (maximum c)]
+--     [ if member i c && c ! i >= h then '*' else ' ' | i <- [0 .. 9] ] ++ "\n"
+--   ++ "==========\n0123456789\n"
+--  where
+--   -- We first generate a count of items from methods imported from Data.Map
+--   c = foldr
+--     (alter
+--       (\x -> case x of
+--         Just n -> Just (n + 1)
+--         _      -> Just 1
+--       )
+--     )
+--     empty
+--     l
+
 -- exercise 3: histogram
 histogram :: [Integer] -> String
 histogram l =
   -- In each line, we print out '*' (for each count) for every number whose
   -- count is >= that line's count, of ' ' otherwise.
   do
-    h <- reverse [1 .. (maximum c)]
-    [ if member i c && c ! i >= h then '*' else ' ' | i <- [0 .. 9] ] ++ "\n"
+    h <- reverse [1 .. maximum c]
+    [ if c !! i >= h then '*' else ' ' | i <- [0 .. 9] ] ++ "\n"
   ++ "==========\n0123456789\n"
- where
   -- We first generate a count of items from methods imported from Data.Map
-  c = foldr
-    (alter
-      (\x -> case x of
-        Just n -> Just (n + 1)
-        _      -> Just 1
-      )
-    )
-    empty
-    l
+  where c = map (\x -> length x - 1) $ group $ sort (l ++ [0 .. 9])
