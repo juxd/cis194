@@ -64,7 +64,7 @@ instance Fractional (Stream Integer) where
     s = Stream (a `div` b) (scaled (1 `div` b) (lt - s * rt))
 
 fibs3 :: Stream Integer
-fibs3 = x / Stream 1 (Stream (-1) (Stream (-1) (streamRepeat 0)))
+fibs3 = x / (1 - x - x ^ 2)
 
 -- Exercise 7
 data Matrix = Matrix Integer Integer Integer Integer
